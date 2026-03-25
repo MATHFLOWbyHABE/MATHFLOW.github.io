@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MATHFLOW</title>
+  <style>
+    :root {
+      --bg: #0f0b14;
+      --bg-soft: #17111f;
+      --bg-card: rgba(30, 22, 40, 0.72);
+      --purple: #7a3cff;
+      --purple-light: #a57bff;
+      --text: #f5f1ff;
+      --muted: #c8bddb;
+      --border: rgba(165, 123, 255, 0.22);
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(122, 60, 255, 0.18), transparent 30%),
+        radial-gradient(circle at top right, rgba(165, 123, 255, 0.12), transparent 28%),
+        linear-gradient(180deg, #120d18 0%, #0f0b14 45%, #0b0810 100%);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* GÓRNE MENU */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 16px 18px;
+      backdrop-filter: blur(14px);
+      background: rgba(10, 8, 14, 0.72);
+      border-bottom: 1px solid rgba(165, 123, 255, 0.12);
+    }
+
+    .nav {
+      width: min(1200px, 94%);
+      margin: 0 auto;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 20px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(122, 60, 255, 0.95), rgba(92, 35, 214, 0.95));
+      color: white;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      box-shadow: 0 10px 24px rgba(122, 60, 255, 0.24);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    }
+
+    .nav a:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+      box-shadow: 0 14px 28px rgba(122, 60, 255, 0.34);
+    }
+
+    .nav svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* GŁÓWNY UKŁAD */
+    .container {
+      width: min(1200px, 94%);
+      margin: 0 auto;
+      padding: 38px 0 70px;
+    }
+
+    .hero {
+      min-height: calc(100vh - 98px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .hero-inner {
+      width: 100%;
+      padding: 30px 0 10px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(122, 60, 255, 0.14);
+      border: 1px solid rgba(165, 123, 255, 0.18);
+      color: var(--purple-light);
+      font-weight: 700;
+      letter-spacing: 0.4px;
+    }
+
+    .hero h1 {
+      margin: 20px 0 14px;
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      width: min(820px, 92%);
+      margin: 0 auto;
+      font-size: 1.08rem;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    .scroll-hint {
+      margin-top: 28px;
+      color: rgba(245, 241, 255, 0.7);
+      font-size: 0.95rem;
+    }
+
+    /* SEKCJE */
+    .section {
+      margin-top: 26px;
+      padding: 26px 0;
+    }
+
+    .section-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      margin: 0 0 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-title svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--purple-light);
+      flex-shrink: 0;
+    }
+
+    .section-lead {
+      color: var(--muted);
+      line-height: 1.8;
+      margin: 0 0 22px;
+      width: min(820px, 100%);
+      white-space: pre-line;
+    }
+
+    /* BLOKI */
+    .soft-panel {
+      background: linear-gradient(180deg, rgba(30, 22, 40, 0.82), rgba(16, 12, 22, 0.8));
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    /* O MNIE */
+    .about-content {
+      padding: 28px;
+      line-height: 1.9;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+
+    .about-content strong {
+      color: var(--text);
+    }
+
+    /* OFERTY - ROZWIJANE KAFELKI */
+    .offers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .offer-card {
+      background: linear-gradient(180deg, rgba(28, 20, 38, 0.9), rgba(12, 9, 16, 0.95));
+      border: 1px solid rgba(165, 123, 255, 0.18);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .offer-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(165, 123, 255, 0.34);
+    }
+
+    .offer-summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      user-select: none;
+    }
+
+    .offer-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .offer-title {
+      display: block;
+    }
+
+    .offer-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(122, 60, 255, 0.16);
+      border: 1px solid rgba(165, 123, 255, 0.22);
+      color: var(--purple-light);
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+    }
+
+    .offer-card[open] .offer-icon {
+      transform: rotate(45deg);
+    }
+
+    .offer-content {
+      padding: 0 24px 24px;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 0.98rem;
+    }
+
+    /* KONTAKT */
+    .contact-wrap {
+      padding: 28px;
+      line-height: 1.9;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+
+    .contact-line {
+      margin: 0 0 10px;
+    }
+
+    .contact-line strong {
+      color: var(--text);
+    }
+
+    footer {
+      padding: 30px 16px 42px;
+      text-align: center;
+      color: rgba(200, 189, 219, 0.7);
+    }
+
+    /* RESPONSYWNOŚĆ */
+    @media (max-width: 960px) {
+      .offers-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav a {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .container {
+        width: min(1200px, 92%);
+      }
+
+      .about-content,
+      .contact-wrap {
+        padding: 20px;
+      }
+
+      .offer-summary {
+        padding: 20px;
+      }
+
+      .offer-content {
+        padding: 0 20px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar" id="top">
+    <nav class="nav">
+      <a href="#top">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3l9 8h-3v10h-5v-6H11v6H6V11H3l9-8z"></path>
+        </svg>
+        Strona główna
+      </a>
+
+      <a href="#o-mnie">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"></path>
+        </svg>
+        O mnie
+      </a>
+
+      <a href="#oferty">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.45A2 2 0 0 0 10 19h9v-2h-8l1.1-2h5.45a2 2 0 0 0 1.79-1.11L23 6H6"></path>
+        </svg>
+        Oferty
+      </a>
+
+      <a href="#kontakt">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6.6 10.8c1.5 2.9 3.7 5.1 6.6 6.6l2.2-2.2c.3-.3.8-.4 1.2-.3 1.3.4 2.7.6 4.1.6.7 0 1.3.6 1.3 1.3V21c0 .7-.6 1.3-1.3 1.3C10.4 22.3 1.7 13.6 1.7 2.3 1.7 1.6 2.3 1 3 1h3.3c.7 0 1.3.6 1.3 1.3 0 1.4.2 2.8.6 4.1.1.4 0 .9-.3 1.2l-2.3 2.2z"></path>
+        </svg>
+        Kontakt
+      </a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-inner">
+        <h1>MATHFLOW</h1>
+        <div class="scroll-hint">Korepetycje z matematyki i nie tylko.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="soft-panel">
+        <details class="offer-card" style="margin:0;border:none;box-shadow:none;border-radius:0;">
+          <summary class="offer-summary">
+            <span class="offer-title">Wymagania na maturkę 26</span>
+            <span class="offer-icon">+</span>
+          </summary>
+          <div class="offer-content">
+            <ol style="margin:0;padding-left:22px;">
+              <li>Liczby rzeczywiste</li>
+              <li>Wyrażenia algebraiczne</li>
+              <li>Równania i nierówności</li>
+              <li>Układy równań</li>
+              <li>Ciągi</li>
+              <li>Trygonometria</li>
+              <li>Planimetria</li>
+              <li>Geometria analityczna na płaszczyźnie kartezjańskiej</li>
+              <li>Stereometria</li>
+              <li>Kombinatoryka</li>
+              <li>Rachunek prawdopodobieństwa i statystyka</li>
+              <li>Optymalizacja i rachunek różniczkowy</li>
+            </ol>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="section" id="o-mnie">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"></path>
+        </svg>
+        About me
+      </h2>
+      <p class="section-lead">
+        Cześć mam na imię Filip mam 20 lat i jestem studentem. Chętnie pomogę ci w matematyce i fizyce, jeśli tego potrzebujesz.
+      </p>
+
+      <div class="soft-panel about-content">
+        A to może cię zachęcić:<br>
+        • Byłem na profilu Matematyczno -fizycznym<br>
+        • Maturę rozszerzoną napisałem na 92% (rozszerzoną ofc)<br>
+        • Nie będziemy nudno powtarzać zadań, tylko się czegoś nauczymy<br>
+        • Pisałem maturę w tym dziesięcioleciu, a nie w zeszłym<br>
+        • Ja jestem tu dla ciebie i korepetycje to twój czas dlatego ty nadajesz tempa.
+      </div>
+    </section>
+
+    <section class="section" id="oferty">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.45A2 2 0 0 0 10 19h9v-2h-8l1.1-2h5.45a2 2 0 0 0 1.79-1.11L23 6H6"></path>
+        </svg>
+        Possibilities
+      </h2>
+
+      <p class="section-lead">
+        Tu są tematy i ich warianty, w których mogę ci pomóc
+        Here are the topics and their variants that I can help you with :D
+      </p>
+
+      <div class="offers-grid">
+        <details class="offer-card">
+          <summary class="offer-summary">
+            <span class="offer-title">Matematyka online</span>
+            <span class="offer-icon">+</span>
+          </summary>
+          <div class="offer-content">
+            Matma online ? Bez problemów z dojazdem, bez spiny na luzie się łączymy i robimy, wszystko byś zrozumiał/a o co tam chodzi.
+          </div>
+        </details>
+
+        <details class="offer-card">
+          <summary class="offer-summary">
+            <span class="offer-title">Matematyka Stacjonarna</span>
+            <span class="offer-icon">+</span>
+          </summary>
+          <div class="offer-content">
+            Na pewno milsza atmosfera i więcej nauczysz się na żywo niż przez ekran.
+          </div>
+        </details>
+
+        <details class="offer-card">
+          <summary class="offer-summary">
+            <span class="offer-title">Fizyka online</span>
+            <span class="offer-icon">+</span>
+          </summary>
+          <div class="offer-content">
+            Ogarniemy fizykę online, ale jeśli bardzo będziesz chciał/a pomyślimy nad spotkaniami na żywo.
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="section" id="kontakt">
+      <h2 class="section-title">Kontakt</h2>
+      <p class="section-lead"></p>
+
+      <div class="soft-panel contact-wrap">
+        <div class="contact-links" style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <a href="tel:+48786232003" target="_blank" rel="noopener noreferrer"
+             style="display: inline-flex; align-items: center; justify-content: center; padding: 10px; border-radius: 999px; background: linear-gradient(135deg, rgba(122, 60, 255, 0.95), rgba(92, 35, 214, 0.95)); box-shadow: 0 8px 20px rgba(122, 60, 255, 0.25); text-decoration: none;">
+            <img src="img/viber.png" alt="Telefon" style="width: 14px; height: 14px; display: block;">
+          </a>
+
+          <a href="https://www.facebook.com/filip.chaber?locale=pl_PL" target="_blank" rel="noopener noreferrer"
+             style="display: inline-flex; align-items: center; justify-content: center; padding: 10px; border-radius: 999px; background: linear-gradient(135deg, rgba(122, 60, 255, 0.95), rgba(92, 35, 214, 0.95)); box-shadow: 0 8px 20px rgba(122, 60, 255, 0.25); text-decoration: none;">
+            <img src="img/facebook.png" alt="Facebook" style="width: 14px; height: 14px; display: block;">
+          </a>
+
+          <a href="https://www.instagram.com/el_phelipee" target="_blank" rel="noopener noreferrer"
+             style="display: inline-flex; align-items: center; justify-content: center; padding: 10px; border-radius: 999px; background: linear-gradient(135deg, rgba(122, 60, 255, 0.95), rgba(92, 35, 214, 0.95)); box-shadow: 0 8px 20px rgba(122, 60, 255, 0.25); text-decoration: none;">
+            <img src="img/social.png" alt="Instagram" style="width: 14px; height: 14px; display: block;">
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    I hope u like my website ;D
+  </footer>
+
+</body>
+</html>
